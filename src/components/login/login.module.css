@@ -1,0 +1,436 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+.page {
+  --deep: #005719; /* panel, buttons, links */
+  --deep-dark: #003b11; /* copy card on the map */
+  --deep-hover: #004214;
+  --brand: #149e02; /* accent: vehicles, logo mark */
+  --line: #7fd18a; /* geofence outlines */
+  --route: #b8f0bf; /* route lines */
+  --flag: #f2a73b; /* single warm accent: selected zone, vehicle needing attention */
+  --paper: #f3f7f3;
+  --ink: #10261a;
+  --muted: #4b6353;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  /* Own scroll container, in case global CSS disables page scrolling. */
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-family: 'IBM Plex Sans', var(--mantine-font-family);
+  color: var(--ink);
+}
+
+/* ---------- Map panel ---------- */
+.mapPanel {
+  position: relative;
+  overflow: hidden;
+  background: var(--deep);
+  display: flex;
+  align-items: flex-end;
+  padding: 56px;
+}
+
+.map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* City grid: static, quiet backdrop. */
+.street {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.11);
+  stroke-width: 1.5;
+}
+
+/* Geofences: outlines trace in, hold, and fade, on a continuous loop. */
+.geofence,
+.geofenceHot {
+  fill: transparent;
+  stroke: var(--line);
+  stroke-width: 1.5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: cycle 9s ease-in-out infinite backwards;
+}
+
+.layerGroup {
+  transition: opacity 250ms ease;
+}
+
+/* The zone a vehicle is inside right now: same loop, with an amber fill that breathes. */
+.geofenceHot {
+  stroke: var(--flag);
+  stroke-width: 2.5;
+  animation: cycle 9s ease-in-out infinite backwards, glow 2.4s ease-in-out infinite alternate backwards;
+}
+
+/* Routes: a soft bed under a dashed line that marches in the direction of travel. */
+.routeBed {
+  fill: none;
+  stroke: rgba(184, 240, 191, 0.16);
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.route {
+  fill: none;
+  stroke: var(--route);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 10 9;
+  animation: march 1.4s linear infinite;
+}
+
+/* Stops. */
+.stop {
+  fill: #fff;
+  stroke: var(--deep);
+  stroke-width: 2;
+}
+
+.stopGroup {
+  transition: opacity 250ms ease;
+}
+
+.stopPulse {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pulse 3s ease-out infinite;
+}
+
+/* Vehicles. */
+.vehicle {
+  fill: var(--brand);
+  stroke: #fff;
+  stroke-width: 3;
+}
+
+.vehicleWarn {
+  fill: var(--flag);
+  stroke: #fff;
+  stroke-width: 3;
+}
+
+.vehiclePulse,
+.vehiclePulseWarn {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pulse 2.6s ease-out infinite;
+}
+
+.vehiclePulseWarn {
+  stroke: var(--flag);
+}
+
+.scan {
+  fill: url(#scanGrad);
+  pointer-events: none;
+  animation: scan 7s linear infinite;
+}
+
+.dim {
+  opacity: 0.12;
+}
+
+@keyframes cycle {
+  0% { stroke-dashoffset: 1; opacity: 0; }
+  10% { opacity: 1; }
+  40% { stroke-dashoffset: 0; }
+  85% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+@keyframes glow {
+  from { fill: rgba(242, 167, 59, 0.12); }
+  to { fill: rgba(242, 167, 59, 0.45); }
+}
+
+@keyframes scan {
+  from { transform: translateY(-60px); }
+  to { transform: translateY(740px); }
+}
+
+@keyframes march {
+  to { stroke-dashoffset: -19; }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  70%, 100% { transform: scale(3.4); opacity: 0; }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+.mapCopy {
+  position: relative;
+  z-index: 1;
+  max-width: 460px;
+  padding: 24px 28px;
+  background: rgba(0, 59, 17, 0.92);
+  border-left: 4px solid var(--flag);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logoMark {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--brand);
+  color: #fff;
+}
+
+.brand {
+  font-family: 'Sora', 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
+.mapTitle {
+  margin-top: 16px;
+  font-family: 'Sora', 'IBM Plex Sans', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.3;
+  color: #fff;
+}
+
+/* Legend: each swatch matches its layer on the map. */
+.legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 20px;
+  margin: 20px 0 0;
+  padding: 16px 0 0;
+  list-style: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 4px 0;
+  font: inherit;
+  font-size: 13px;
+  color: #d6eddb;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: color 150ms ease;
+}
+
+.legendItem:hover,
+.legendItem:focus-visible {
+  color: #fff;
+}
+
+.legendItem:focus-visible {
+  outline: 2px solid var(--flag);
+  outline-offset: 2px;
+}
+
+.swatch {
+  flex: none;
+  width: 22px;
+  height: 14px;
+  box-sizing: border-box;
+}
+
+.sw_vehicles {
+  width: 14px;
+  height: 14px;
+  margin: 0 4px;
+  border: 2.5px solid #fff;
+  border-radius: 50%;
+  background: var(--brand);
+}
+
+.sw_routes {
+  height: 0;
+  border-top: 3px dashed var(--route);
+}
+
+.sw_geofences {
+  border: 1.5px solid var(--line);
+}
+
+.sw_stops {
+  width: 10px;
+  height: 10px;
+  margin: 0 6px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.25);
+}
+
+/* ---------- Form panel ---------- */
+.formPanel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  background: var(--paper);
+}
+
+.form {
+  width: 100%;
+  max-width: 400px;
+  animation: rise 600ms ease-out 200ms both;
+}
+
+.title {
+  font-family: 'Sora', 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 34px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.subtitle {
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.label {
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.input,
+.innerInput {
+  background: #fff;
+  border-color: #b7c9bc;
+  color: var(--ink);
+}
+
+.input:focus,
+.input:focus-within {
+  border-color: var(--deep);
+  outline: 2px solid rgba(20, 158, 2, 0.3);
+  outline-offset: 0;
+}
+
+/* Icons inside the inputs */
+.section {
+  color: var(--deep);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--deep);
+  font-weight: 500;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--deep);
+  outline-offset: 2px;
+}
+
+.submit {
+  --button-bg: var(--deep);
+  --button-hover: var(--deep-hover);
+  font-weight: 600;
+  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+}
+
+.submit:hover:not([data-loading]) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0, 87, 25, 0.3);
+}
+
+.submit:focus-visible {
+  outline: 3px solid var(--flag);
+  outline-offset: 2px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .page {
+    grid-template-columns: 1fr;
+  }
+
+  /* Compact banner so the form is visible without scrolling. */
+  .mapPanel {
+    min-height: 150px;
+    padding: 16px;
+  }
+
+  .mapCopy {
+    padding: 12px 16px;
+  }
+
+  .mapTitle {
+    margin-top: 10px;
+    font-size: 16px;
+  }
+
+  .legend {
+    display: none;
+  }
+
+  .formPanel {
+    align-items: flex-start;
+    padding-top: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route,
+  .stopPulse,
+  .vehiclePulse,
+  .vehiclePulseWarn,
+  .form {
+    animation: none;
+  }
+
+  .scan {
+    display: none;
+  }
+
+  .geofence,
+  .geofenceHot {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .geofenceHot {
+    fill: rgba(242, 167, 59, 0.3);
+  }
+}
