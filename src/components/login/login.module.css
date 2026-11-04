@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap");
 
 .page {
   --deep: #005719; /* panel, buttons, links */
@@ -19,7 +19,7 @@
   height: 100dvh;
   overflow-y: auto;
   overflow-x: hidden;
-  font-family: 'IBM Plex Sans', var(--mantine-font-family);
+  font-family: "IBM Plex Sans", var(--mantine-font-family);
   color: var(--ink);
 }
 
@@ -66,7 +66,9 @@
 .geofenceHot {
   stroke: var(--flag);
   stroke-width: 2.5;
-  animation: cycle 9s ease-in-out infinite backwards, glow 2.4s ease-in-out infinite alternate backwards;
+  animation:
+    cycle 9s ease-in-out infinite backwards,
+    glow 2.4s ease-in-out infinite alternate backwards;
 }
 
 /* Routes: a soft bed under a dashed line that marches in the direction of travel. */
@@ -148,35 +150,71 @@
 }
 
 @keyframes cycle {
-  0% { stroke-dashoffset: 1; opacity: 0; }
-  10% { opacity: 1; }
-  40% { stroke-dashoffset: 0; }
-  85% { stroke-dashoffset: 0; opacity: 1; }
-  100% { stroke-dashoffset: 0; opacity: 0; }
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  40% {
+    stroke-dashoffset: 0;
+  }
+  85% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
 }
 
 @keyframes glow {
-  from { fill: rgba(242, 167, 59, 0.12); }
-  to { fill: rgba(242, 167, 59, 0.45); }
+  from {
+    fill: rgba(242, 167, 59, 0.12);
+  }
+  to {
+    fill: rgba(242, 167, 59, 0.45);
+  }
 }
 
 @keyframes scan {
-  from { transform: translateY(-60px); }
-  to { transform: translateY(740px); }
+  from {
+    transform: translateY(-60px);
+  }
+  to {
+    transform: translateY(740px);
+  }
 }
 
 @keyframes march {
-  to { stroke-dashoffset: -19; }
+  to {
+    stroke-dashoffset: -19;
+  }
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); opacity: 0.7; }
-  70%, 100% { transform: scale(3.4); opacity: 0; }
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  70%,
+  100% {
+    transform: scale(3.4);
+    opacity: 0;
+  }
 }
 
 @keyframes rise {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .mapCopy {
@@ -207,7 +245,7 @@
 }
 
 .brand {
-  font-family: 'Sora', 'IBM Plex Sans', sans-serif;
+  font-family: "Sora", "IBM Plex Sans", sans-serif;
   font-weight: 700;
   font-size: 20px;
   letter-spacing: -0.01em;
@@ -216,7 +254,7 @@
 
 .mapTitle {
   margin-top: 16px;
-  font-family: 'Sora', 'IBM Plex Sans', sans-serif;
+  font-family: "Sora", "IBM Plex Sans", sans-serif;
   font-weight: 600;
   font-size: 24px;
   line-height: 1.3;
@@ -310,7 +348,7 @@
 }
 
 .title {
-  font-family: 'Sora', 'IBM Plex Sans', sans-serif;
+  font-family: "Sora", "IBM Plex Sans", sans-serif;
   font-weight: 700;
   font-size: 34px;
   letter-spacing: -0.02em;
@@ -367,7 +405,10 @@
   --button-bg: var(--deep);
   --button-hover: var(--deep-hover);
   font-weight: 600;
-  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease,
+    background-color 150ms ease;
 }
 
 .submit:hover:not([data-loading]) {
